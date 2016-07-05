@@ -4,34 +4,30 @@
 \alias{return.level}
 \title{The associated return level}
 \usage{
-return.level(period, mu, sigma, xi)
+return.level(period, loc, scale, shape)
 }
 \arguments{
-\item{period}{An integer greater than 1.
-Gives the period \eqn{T} over which the return level is computed. See details.}
+\item{period}{An integer indicating the wished return period T.}
 
-\item{mu}{A numerical value or a vector of real values.
-GEV location parameter. Must be of length one or same length as \code{sigma} and/or \code{xi}.}
+\item{loc}{A numerical value or vector for the GEV location parameter. Must be of length one or same length as \code{scale} and/or \code{shape}.}
 
-\item{sigma}{A numerical value or a vector of real values.
-GEV scale parameter. Must be of length one or same length as \code{mu} and/or \code{xi}.}
+\item{scale}{A numerical value or vector for the GEV scale parameter. Must be of length one or same length as \code{loc} and/or \code{shape}.}
 
-\item{xi}{A numerical value or a vector of real values.
-GEV shape parameter. Must be of length one or same length as \code{mu} and/or \code{sigma}.}
+\item{shape}{A numerical value or vector for the GEV shape parameter. Must be of length one or same length as \code{loc} and/or \code{scale}.}
 }
 \value{
-This function returns either a numerical value or a numerical vector. If \code{mu}, \code{sigma}, \code{xi} are of length one each, it returns a single numerical value. Otherwise, it returns a vector with length corresponding to the given GEV parameters.
+A numerical value or a numerical vector, depending on the input arguments \code{loc}, \code{scale}, \code{shape}
 }
 \description{
 Computation of the associated return level with given period and GEV parameters.
 }
 \details{
-The \eqn{T}-year return level is a typical value of interest in Extreme Value Theory. It represents the value that is expected to be exceeded once over \eqn{T} years. Given the parameters \eqn{\mu}, \eqn{\sigma} and \eqn{\xi} of the GEV distribution associated to the yearly maxima, we can compute the associated \eqn{T}-return level \eqn{y_T} by:
+The \eqn{T}-year return level is a common value of risk in Extreme Value Theory. It represents the value that is expected to be exceeded once over \eqn{T} years by the annual maxima. Given the parameters \eqn{\mu}, \eqn{\sigma} and \eqn{\xi} of the GEV distribution associated to the yearly maxima, we can compute the associated \eqn{T}-return level \eqn{y_T} by:
 \deqn{y_T := \mu + \frac{\sigma}{\xi} \left[ \log\left(\frac{T}{T-1}\right)^{-\xi} -1 \right] ~.}
 }
 \examples{
-return.level(period = 100, mu = 1, sigma = 1, xi = 1)
-return.level(period = 200, mu = 1:10, sigma = 1, xi = 0)
+return.level(period = 100, loc = 1, scale = 1, shape = 1)
+return.level(period = 200, loc = 1:10, scale = 1, shape = 0)
 
 
 }

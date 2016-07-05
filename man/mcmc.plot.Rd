@@ -4,45 +4,40 @@
 \alias{mcmc.plot}
 \title{Markov chains plotting}
 \usage{
-mcmc.plot(fit, mfrow, plot.spatial)
+mcmc.plot(fit, plot.spatial, mfrow)
 }
 \arguments{
-\item{fit}{A named list.
-Output from the \code{hkevp.fit} procedure.}
+\item{fit}{Output from the \code{hkevp.fit} procedure.}
 
-\item{mfrow}{A vector of two numerical values.
-Parameter of the window plotting called by the \code{plot(...)} function. Optional.}
+\item{plot.spatial}{Logical indicating if the Markov chains of the sills and ranges hyperparameters should be plotted. FALSE by default.}
 
-\item{plot.spatial}{Logical.
-Should the Markov chains of the sills and ranges hyperparameters should be plotted (FALSE by default)?}
+\item{mfrow}{Optional vector of two numerical values indicating the parameter of the window plotting called by the \code{plot(...)} function.}
 }
 \description{
-Plot of the resulting Markov chains obtained by the MCMC procedure \code{hkevp.fit}. May be used to assess graphically convergence of the chains.
+Plots of the resulting Markov chains obtained by the MCMC procedures \code{hkevp.fit} or \code{latent.fit}. May be used to assess graphically convergence of the chains.
 }
 \examples{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:3,1:3))
 knots <- sites
-mu <- sites[,1]*10
-sigma <- 3
-xi <- .2
+loc <- sites[,1]*10
+scale <- 3
+shape <- .2
 alpha <- .4
 tau <- 1
-ysim <- hkevp.rand(10, sites, knots, mu, sigma, xi, alpha, tau)
+ysim <- hkevp.rand(10, sites, knots, loc, scale, shape, alpha, tau)
 
 # HKEVP fit:
-fit <- hkevp.fit(ysim, sites, knots, niter = 100, nburn = 50, quiet = FALSE)
+fit <- hkevp.fit(ysim, sites, niter = 1000)
 
 # Markov chains plot:
 # mcmc.plot(fit)
 
 
 
+
 }
 \author{
 Quentin Sebille
-}
-\seealso{
-\link{mcmc.accept}
 }
 

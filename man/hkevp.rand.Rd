@@ -4,32 +4,25 @@
 \alias{hkevp.rand}
 \title{Simulation of the HKEVP}
 \usage{
-hkevp.rand(nrep, sites, knots, mu, sigma, xi, alpha, tau)
+hkevp.rand(nrep, sites, knots, loc, scale, shape, alpha, tau)
 }
 \arguments{
 \item{nrep}{A positive integer.
-Number of realisations of the block maxima process.}
+Number of realisations of the block mashapema process.}
 
-\item{sites}{A numerical matrix of real values.
-Coordinates for the sites positions: each row corresponds to a position and each column to a spatial coordinate.}
+\item{sites}{The coordinates of the sites where the data are observed. Each row corresponds to a site position.}
 
-\item{knots}{A numerical matrix of real values.
-Coordinates of the knots: each row corresponds to a knot position and each column to a spatial coordinate. If missing, \code{knots} is equal to \code{sites}.}
+\item{knots}{The coordinates of the knots in the HKEVP. By default, the positions of the knots coincide with the positions of the sites.}
 
-\item{mu}{A numerical value or a vector of real values.
-GEV location parameter. If \code{mu} is a vector, its length must coincide with the number of sites.}
+\item{loc}{A numerical value or a vector of real values for the GEV location parameter. If a vector, its length must coincide with the number of sites. The value by default is 1.}
 
-\item{sigma}{A numerical value or a vector of positive values.
-GEV scale parameter. If \code{sigma} is a vector, its length must coincide with the number of sites.}
+\item{scale}{A numerical value or a vector of real values for the GEV scale parameter. If a vector, its length must coincide with the number of sites. The value by default is 1.}
 
-\item{xi}{A numerical value or a vector of real values.
-GEV shape parameter. If \code{xi} is a vector, its length must coincide with the number of sites.}
+\item{shape}{A numerical value or a vector of real values for the GEV shape parameter. If a vector, its length must coincide with the number of sites. The value by default is 1.}
 
-\item{alpha}{A numerical value in (0,1].
-Dependence parameter \eqn{\alpha} in the HKEVP. Low value (resp. value close to 1) corresponds to the limit case of complete spatial dependence (resp. independence).}
+\item{alpha}{The dependence parameter \eqn{\alpha} of the HKEVP: a single value in (0,1].}
 
-\item{tau}{A positive numerical value.
-Bandwidth parameter \eqn{\tau} of the kernel functions in the HKEVP.}
+\item{tau}{The bandwidth parameter \eqn{\tau} of the kernel functions in the HKEVP: a positive value.}
 }
 \value{
 A numerical matrix of real values.
@@ -39,7 +32,7 @@ Each column corresponds to a position and each row to a realisation of the proce
 Simulation procedure of the HKEVP with given sites and knots positions and marginal and spatial dependence parameters.
 }
 \details{
-Simulating one realisation of the block maxima process \eqn{Y(\cdot)} from the HKEVP involves three steps:
+Simulating one realisation of the block mashapema process \eqn{Y(\cdot)} from the HKEVP involves three steps:
 \enumerate{
 \item The \emph{nugget process} \eqn{U(\cdot)} is generated independently at each position, by simulating a random variable with \eqn{GEV(1,\alpha,\alpha)} distribution.
 \item The \emph{residual dependence process} \eqn{\theta(\cdot)} is computed by using the kernel functions centered at the set of knots, the bandwidth parameter \eqn{\tau} and the simulations of the positive stable \eqn{PS(\alpha)} random effect \eqn{A}.
@@ -49,13 +42,12 @@ Simulating one realisation of the block maxima process \eqn{Y(\cdot)} from the H
 \examples{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:3,1:3))
-knots <- sites
-mu <- sites[,1]*10
-sigma <- 3
-xi <- .2
+loc <- sites[,1]*10
+scale <- 3
+shape <- 0
 alpha <- .4
 tau <- 1
-ysim <- hkevp.rand(10, sites, knots, mu, sigma, xi, alpha, tau)
+ysim <- hkevp.rand(10, sites, sites, loc, scale, shape, alpha, tau)
 
 
 
