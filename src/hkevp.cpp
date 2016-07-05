@@ -323,9 +323,9 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
     GEVcovarMatrices.slice(1) = sills_init * exp(-pow(dss/ranges_init, 2.0)/2);
     GEVcovarMatrices.slice(2) = sills_init * exp(-pow(dss/ranges_init, 2.0)/2);
   } else if (correlation==corr_mat32) {
-    GEVcovarMatrices.slice(0) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
-    GEVcovarMatrices.slice(1) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
-    GEVcovarMatrices.slice(2) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
+    GEVcovarMatrices.slice(0) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
+    GEVcovarMatrices.slice(1) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
+    GEVcovarMatrices.slice(2) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
   } else if (correlation==corr_mat52) {
     GEVcovarMatrices.slice(0) = sills_init * (1+dss/ranges_init*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_init, 2.0)) % exp(-dss/ranges_init *sqrt(5.0));
     GEVcovarMatrices.slice(1) = sills_init * (1+dss/ranges_init*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_init, 2.0)) % exp(-dss/ranges_init *sqrt(5.0));
@@ -1164,9 +1164,9 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
     GEVcovarMatrices.slice(1) = sills_init * exp(-pow(dss/ranges_init, 2.0)/2);
     GEVcovarMatrices.slice(2) = sills_init * exp(-pow(dss/ranges_init, 2.0)/2);
   } else if (correlation==corr_mat32) {
-    GEVcovarMatrices.slice(0) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
-    GEVcovarMatrices.slice(1) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
-    GEVcovarMatrices.slice(2) = sills_init * (1+sqrt(3)*dss/ranges_init) % exp(-sqrt(3)*dss/ranges_init);
+    GEVcovarMatrices.slice(0) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
+    GEVcovarMatrices.slice(1) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
+    GEVcovarMatrices.slice(2) = sills_init * (1+sqrt(3.0)*dss/ranges_init) % exp(-sqrt(3.0)*dss/ranges_init);
   } else if (correlation==corr_mat52) {
     GEVcovarMatrices.slice(0) = sills_init * (1+dss/ranges_init*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_init, 2.0)) % exp(-dss/ranges_init *sqrt(5.0));
     GEVcovarMatrices.slice(1) = sills_init * (1+dss/ranges_init*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_init, 2.0)) % exp(-dss/ranges_init *sqrt(5.0));

@@ -1,4 +1,4 @@
-96fda859d02a2a9fb5c6614cc61d7804 *DESCRIPTION
+f0b391f4d664a526ca29b025c862c5c9 *DESCRIPTION
 1a49cdf989809dd3e851952c4f2a61a4 *NAMESPACE
 5d6c9358bc63e20189b48a4d70b540fc *R/RcppExports.R
 3a2a4e09fcd75deb5cfd2cdfc8e7d0f1 *R/extrapol.gev.R
@@ -26,4 +26,4 @@ a58ab3576e444bbc8251073533a71a2c *man/mcmc.fun.Rd
 c0c8a18806301fac347d2dffb5343a2f *man/return.level.Rd
 aa3bf9b18a7cab4a1e863ac0fc91b6de *src/Makevars
 700d88a8025b4f7a25f12538cec8d91c *src/RcppExports.cpp
-22a318c8e53567edb51e8bdedfa0e404 *src/hkevp.cpp
+8b77635a63f3aaa72a21c3d279f7f599 *src/hkevp.cpp

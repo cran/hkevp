@@ -2,7 +2,7 @@ Package: hkevp
 Type: Package
 Title: Spatial Extreme Value Analysis with the Hierarchical Model of
         Reich and Shaby (2012)
-Version: 1.1
+Version: 1.1.1
 Date: 2016-06-06
 Author: Quentin Sebille
 Maintainer: Quentin Sebille <quentin.sebille@gmail.com>
@@ -12,6 +12,6 @@ LinkingTo: Rcpp, RcppArmadillo
 Depends: Rcpp (>= 0.11.0)
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-07-05 09:52:51 UTC; sebille
+Packaged: 2016-07-05 14:01:56 UTC; sebille
 Repository: CRAN
-Date/Publication: 2016-07-05 12:49:55
+Date/Publication: 2016-07-05 23:52:23
