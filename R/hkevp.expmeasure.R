@@ -70,13 +70,13 @@
 #' # HKEVP fit:
 #' fit <- hkevp.fit(ysim, sites, niter = 1000)
 #' 
-#' predict.em <- hkevp.expmeasure(1, fit)
-#' true.em <- hkevp.expmeasure(1, sites = sites, knots = sites, alpha = alpha, tau = tau)
+#' predict.em <- hkevp.expmeasure(1, fit = fit)
+#' true.em <- hkevp.expmeasure(1, sites, sites, alpha, tau)
 #' # plot(predict.em, ylim = range(predict.em, true.em), type = "l")
 #' # abline(h = true.em, col = 2, lwd = 2)
 #' 
 #' 
-hkevp.expmeasure <- function(z, fit, sites, knots, alpha, tau) {
+hkevp.expmeasure <- function(z, sites, knots, alpha, tau, fit) {
   if (missing(fit)) {  ## Evaluation with given parameters
     # Catch Errors and default values
     if (alpha <= 0 | alpha > 1) stop("alpha must be between 0 and 1!")

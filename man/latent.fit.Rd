@@ -5,8 +5,7 @@
 \title{Fitting procedure of the latent variable model}
 \usage{
 latent.fit(y, sites, niter, nburn, nthin, quiet, trace, gev.vary,
-  spatial.covariates, used.covariates, log.scale, correlation, mcmc.init,
-  mcmc.prior, mcmc.jumps)
+  spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
 }
 \arguments{
 \item{y}{A matrix of observed block maxima. Each column corresponds to a site position.}
@@ -26,8 +25,6 @@ latent.fit(y, sites, niter, nburn, nthin, quiet, trace, gev.vary,
 \item{gev.vary}{A logical vector of size three indicating if the GEV parameters (respectively the location, the scale and the shape) are spatially-varying. If not (by default for the shape), the parameter is the same at each position.}
 
 \item{spatial.covariates}{A numerical matrix of spatial covariates. Each row corresponds to a site position. See details.}
-
-\item{used.covariates}{A list with elements \code{loc}, \code{scale} and \code{shape} indicating which covariates should be used for each GEV parameter. See details.}
 
 \item{log.scale}{A logical value indicating if the GEV scale parameter \eqn{\sigma} is modelled by its log. FALSE by default. See details.}
 
@@ -54,7 +51,6 @@ A named list with following elements (less elements if \code{fit.margins} is \co
 \item{\code{data}: the data fitted.}
 \item{\code{sites}: the sites where the data are observed.}
 \item{\code{spatial.covariates}: the spatial covariates.}
-\item{\code{used.covariates}: a boolean matrix version of \code{used.covariates}.}
 \item{\code{correlation}: the type of correlation function for the marginal latent processes.}
 \item{\code{nstep}: the number of steps at the end of the routine after burn-in and thinning.}
 \item{\code{log.scale}: a boolean indicating if the scale parameter has been modelled via its logarithm.}
@@ -75,7 +71,6 @@ Details of the MCMC procedure are presented in \cite{Davison et al. (2012)}. Thi
 If the the parameters are assumed spatially-varying, the user can provide spatial covariates to fit the mean of the latent Gaussian processes. Recall for instance for the GEV location parameter that:
 \deqn{\mu(s) = \beta_{0,\mu} + \beta_{1,\mu} c_1(s) + ... + \beta_{p,\mu} c_p(s) ~.}
 The given matrix \code{spatial.covariates} that represents the \eqn{c_i(s)} elements should have the first column filled with ones to account for the intercept \eqn{\beta_0}.
-The user can specify, through the \code{used.covariates} argument, which covariates \eqn{c_i(s)} may be used for each GEV parameter. As an example, if \code{list(scale = 1:2)} is given, the scale parameter will be described by covariates \eqn{c_1(s)} and \eqn{c_2(s)} only. The other two arguments will (by default) use all spatial covariates, provided that they are spatially-varying (see argument \code{gev.vary}).
 
 The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are named list that have default values. The user can make point changes in these arguments, by setting \code{mcmc.init = list(loc = .5)} for instance, but must respect the constraints of each element:
 \itemize{

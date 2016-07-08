@@ -47,9 +47,6 @@
 #' 
 #' @param correlation
 #' A character string indicating the form of the correlation function associated to the latent Gaussian processes that describes the marginal parameters. Must be one of \code{"expo"}, \code{"gauss"}, \code{"mat32"} (By default) and \code{"mat52"}, respectively corresponding to the exponential, Gaussian, Matern-3/2 and Matern-5/2 correlation functions.
-
-#' @param used.covariates 
-#' A list with elements \code{loc}, \code{scale} and \code{shape} indicating which covariates should be used for each GEV parameter. See details.
 #' 
 #' @param mcmc.init 
 #' A named list indicating the initial states of the chains. See details.
@@ -73,7 +70,6 @@
 #' If the the parameters are assumed spatially-varying, the user can provide spatial covariates to fit the mean of the latent Gaussian processes. Recall for instance for the GEV location parameter that:
 #' \deqn{\mu(s) = \beta_{0,\mu} + \beta_{1,\mu} c_1(s) + ... + \beta_{p,\mu} c_p(s) ~.}
 #' The given matrix \code{spatial.covariates} that represents the \eqn{c_i(s)} elements should have the first column filled with ones to account for the intercept \eqn{\beta_0}.
-#' The user can specify, through the \code{used.covariates} argument, which covariates \eqn{c_i(s)} may be used for each GEV parameter. As an example, if \code{list(scale = 1:2)} is given, the scale parameter will be described by covariates \eqn{c_1(s)} and \eqn{c_2(s)} only. The other two arguments will (by default) use all spatial covariates, provided that they are spatially-varying (see argument \code{gev.vary}).
 #' 
 #' The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are named list that have default values. The user can make point changes in these arguments, by setting \code{mcmc.init = list(loc = .5)} for instance, but must respect the constraints of each element:
 #' \itemize{
@@ -111,7 +107,6 @@
 #' \item{\code{data}: the data fitted.}
 #' \item{\code{sites}: the sites where the data are observed.}
 #' \item{\code{spatial.covariates}: the spatial covariates.}
-#' \item{\code{used.covariates}: a boolean matrix version of \code{used.covariates}.}
 #' \item{\code{correlation}: the type of correlation function for the marginal latent processes.}
 #' \item{\code{nstep}: the number of steps at the end of the routine after burn-in and thinning.}
 #' \item{\code{log.scale}: a boolean indicating if the scale parameter has been modelled via its logarithm.}
@@ -146,7 +141,7 @@
 #' 
 #' 
 #' 
-latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, spatial.covariates, used.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
+latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
 {
   ##########################################
   ## Default values for missing arguments ##
@@ -170,16 +165,6 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   if (length(gev.vary)!=3 | typeof(gev.vary)!="logical") stop("Invalid gev.vary parameter!")
   if (missing(spatial.covariates)) spatial.covariates <- cbind(1, sites)
   if (nrow(spatial.covariates) != nrow(sites)) stop("Arguments sites and spatial.covariates do not match!")
-  ncovariates <- ncol(spatial.covariates)
-  if (missing(used.covariates)) used.covariates <- list()
-  if (is.null(used.covariates$loc)) used.covariates$loc <- 1:ncovariates
-  if (is.null(used.covariates$scale)) used.covariates$scale <- 1:ncovariates
-  if (is.null(used.covariates$shape)) used.covariates$shape <- 1:ncovariates
-  used.loc <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$loc)
-  used.scale <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$scale)
-  used.shape <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$shape)
-  used <- cbind(used.loc, used.scale, used.shape)
-  colnames(used) <- c("loc", "scale", "shape")
   if (missing(log.scale)) log.scale <- FALSE
   if (missing(correlation)) correlation <- "mat32"
   if (!(correlation %in% c("expo", "gauss", "mat32", "mat52"))) stop("Argument correlation must be one of 'expo', 'gauss', 'mat32' or 'mat52'!")
@@ -255,7 +240,7 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   ##########################
   # C++ function
   if (!quiet) cat("MCMC begins...\n")
-    result <- .Call('hkevp_mcmc_latent', PACKAGE = 'hkevp', y0, sites, niter, nburn, trace, quiet, dss, na.mat, spatial.covariates, used, log.scale, gev.vary, correlation, mcmc.init$loc, mcmc.init$scale, mcmc.init$shape, mcmc.init$range, mcmc.init$sill, mcmc.prior$constant.gev, mcmc.prior$beta.sd, mcmc.prior$range, mcmc.prior$sill, mcmc.jumps$gev, mcmc.jumps$range)
+    result <- .Call('hkevp_mcmc_latent', PACKAGE = 'hkevp', y0, sites, niter, nburn, trace, quiet, dss, na.mat, spatial.covariates, log.scale, gev.vary, correlation, mcmc.init$loc, mcmc.init$scale, mcmc.init$shape, mcmc.init$range, mcmc.init$sill, mcmc.prior$constant.gev, mcmc.prior$beta.sd, mcmc.prior$range, mcmc.prior$sill, mcmc.jumps$gev, mcmc.jumps$range)
   
   
   # Burn-in period and thinning
@@ -271,7 +256,6 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   result$data <- y
   result$sites <- sites
   result$spatial.covariates <- spatial.covariates
-  result$used.covariates <- used
   result$correlation <- correlation
   result$nstep <- length(mcmc.index)
   result$log.scale <- log.scale

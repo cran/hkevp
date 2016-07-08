@@ -230,7 +230,6 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
                       arma::mat const& dsk,
                       arma::mat const& nas,
                       arma::mat const& spatial_covariates,
-                      arma::mat const& used,
                       bool const& log_scale,
                       arma::vec const& gev_vary,
                       std::string const& correlation,
@@ -587,7 +586,7 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
         BETA_conjugate_meanVector = BETA_conjugate_covarianceMatrix * (spatial_covariates.t() * GEV_covarMatrix_inverted * GEV_current.col(n_gev));
         
         // Regression parameters BETA
-        BETA_current.col(n_gev) = multiGaussRand_cpp(BETA_conjugate_meanVector, BETA_conjugate_covarianceMatrix).t() % used.col(n_gev);
+        BETA_current.col(n_gev) = multiGaussRand_cpp(BETA_conjugate_meanVector, BETA_conjugate_covarianceMatrix).t();
         
         
         // Mean vector of GEV
@@ -724,7 +723,7 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
     Rcout << "TAU  : " << sum(tau_timer) << " sec (" << sum(tau_timer)/total_time*100 << " %)" << std::endl;
     Rcout << "GEV  : " << sum(GEV_timer) << " sec (" << sum(GEV_timer)/total_time*100 << " %)" << std::endl;
     Rcout << "----------------" << std::endl;
-    Rcout << "TOTAL: " << total_time << std::endl;
+    Rcout << "TOTAL: " << total_time << " sec" << std::endl;
   }
   
   
@@ -1047,7 +1046,7 @@ Rcpp::List mcmc_deponly(arma::mat const& Y,
     Rcout << "ALPHA: " << sum(alpha_timer) << " sec (" << sum(alpha_timer)/total_time*100 << " %)" << std::endl;
     Rcout << "TAU  : " << sum(tau_timer) << " sec (" << sum(tau_timer)/total_time*100 << " %)" << std::endl;
     Rcout << "----------------" << std::endl;
-    Rcout << "TOTAL: " << total_time << std::endl;
+    Rcout << "TOTAL: " << total_time << " sec" << std::endl;
   }
   
   
@@ -1089,7 +1088,6 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
                        arma::mat const& dss,
                        arma::mat const& nas,
                        arma::mat const& spatial_covariates,
-                       arma::mat const& used,
                        bool const& log_scale,
                        arma::vec const& gev_vary,
                        std::string const& correlation,
@@ -1269,7 +1267,7 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
         BETA_conjugate_meanVector = BETA_conjugate_covarianceMatrix * (spatial_covariates.t() * GEV_covarMatrix_inverted * GEV_current.col(n_gev));
         
         // Regression parameters BETA
-        BETA_current.col(n_gev) = multiGaussRand_cpp(BETA_conjugate_meanVector, BETA_conjugate_covarianceMatrix).t() % used.col(n_gev);
+        BETA_current.col(n_gev) = multiGaussRand_cpp(BETA_conjugate_meanVector, BETA_conjugate_covarianceMatrix).t();
         
         
         // Mean vector of GEV

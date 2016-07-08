@@ -4,12 +4,10 @@
 \alias{hkevp.expmeasure}
 \title{Exponent measure of the HKEVP}
 \usage{
-hkevp.expmeasure(z, fit, sites, knots, alpha, tau)
+hkevp.expmeasure(z, sites, knots, alpha, tau, fit)
 }
 \arguments{
 \item{z}{The vector \eqn{(z_1,...,z_n)} where the exponent measure is computed. Can be of length one and thus corresponds then to \eqn{(z,...,z)}.}
-
-\item{fit}{Output from the \code{hkevp.fit} procedure.}
 
 \item{sites}{The coordinates of the sites where the data are observed. Each row correspond to a site position.}
 
@@ -18,6 +16,8 @@ hkevp.expmeasure(z, fit, sites, knots, alpha, tau)
 \item{alpha}{The dependence parameter \eqn{\alpha} of the HKEVP: a single value in (0,1].}
 
 \item{tau}{The bandwidth parameter \eqn{\tau} of the kernel functions in the HKEVP: a positive value.}
+
+\item{fit}{Output from the \code{hkevp.fit} procedure.}
 }
 \value{
 Either a vector if argument \code{fit} is provided, or a single value.
@@ -46,8 +46,8 @@ ysim <- hkevp.rand(10, sites, sites, loc, scale, shape, alpha, tau)
 # HKEVP fit:
 fit <- hkevp.fit(ysim, sites, niter = 1000)
 
-predict.em <- hkevp.expmeasure(1, fit)
-true.em <- hkevp.expmeasure(1, sites = sites, knots = sites, alpha = alpha, tau = tau)
+predict.em <- hkevp.expmeasure(1, fit = fit)
+true.em <- hkevp.expmeasure(1, sites, sites, alpha, tau)
 # plot(predict.em, ylim = range(predict.em, true.em), type = "l")
 # abline(h = true.em, col = 2, lwd = 2)
 

@@ -46,7 +46,6 @@
 #' If the margins are estimated and the parameters are assumed spatially-varying, the user can provide spatial covariates to fit the mean of the latent Gaussian processes. Recall for instance for the GEV location parameter that:
 #' \deqn{\mu(s) = \beta_{0,\mu} + \beta_{1,\mu} c_1(s) + ... + \beta_{p,\mu} c_p(s) ~.}
 #' The given matrix \code{spatial.covariates} that represents the \eqn{c_i(s)} elements should have the first column filled with ones to account for the intercept \eqn{\beta_0}.
-#' The user can specify, through the \code{used.covariates} argument, which covariates \eqn{c_i(s)} may be used for each GEV parameter. As an example, if \code{list(scale = 1:2)} is given, the scale parameter will be described by covariates \eqn{c_1(s)} and \eqn{c_2(s)} only. The other two arguments will (by default) use all spatial covariates, provided that they are spatially-varying (see argument \code{gev.vary}).
 #' 
 #' The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are named list that have default values. The user can make point changes in these arguments, by setting \code{mcmc.init = list(alpha = .5)} for instance, but must respect the constraints of each element:
 #' \itemize{
@@ -92,7 +91,6 @@
 #' \item{\code{sites}: the sites where the data are observed.}
 #' \item{\code{knots}: the set of knots.}
 #' \item{\code{spatial.covariates}: the spatial covariates.}
-#' \item{\code{used.covariates}: a boolean matrix version of \code{used.covariates}.}
 #' \item{\code{correlation}: the type of correlation function for the marginal latent processes.}
 #' \item{\code{nstep}: the number of steps at the end of the routine after burn-in and thinning.}
 #' \item{\code{log.scale}: a boolean indicating if the scale parameter has been modelled via its logarithm.}
@@ -120,6 +118,7 @@
 #' 
 #' @examples
 #' # Simulation of HKEVP:
+#' set.seed(1)
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' loc <- sites[,1]*10
 #' scale <- 3
@@ -129,11 +128,11 @@
 #' ysim <- hkevp.rand(10, sites, sites, loc, scale, shape, alpha, tau)
 #' 
 #' # HKEVP fit:
-#' fit <- hkevp.fit(ysim, sites, niter = 1000)
+#' fit <- latent.fit(ysim, sites, niter = 1000)
 #' 
 #' 
 #' 
-hkevp.fit <- function(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.margins, gev.vary, spatial.covariates, used.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
+hkevp.fit <- function(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.margins, gev.vary, spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
 {
   ##########################################
   ## Default values for missing arguments ##
@@ -160,16 +159,6 @@ hkevp.fit <- function(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.ma
   if (length(gev.vary)!=3 | typeof(gev.vary)!="logical") stop("Invalid gev.vary parameter!")
   if (missing(spatial.covariates)) spatial.covariates <- cbind(1, sites)
   if (nrow(spatial.covariates) != nrow(sites)) stop("Arguments sites and spatial.covariates do not match!")
-  ncovariates <- ncol(spatial.covariates)
-  if (missing(used.covariates)) used.covariates <- list()
-  if (is.null(used.covariates$loc)) used.covariates$loc <- 1:ncovariates
-  if (is.null(used.covariates$scale)) used.covariates$scale <- 1:ncovariates
-  if (is.null(used.covariates$shape)) used.covariates$shape <- 1:ncovariates
-  used.loc <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$loc)
-  used.scale <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$scale)
-  used.shape <- as.numeric(1:ncol(spatial.covariates) %in% used.covariates$shape)
-  used <- cbind(used.loc, used.scale, used.shape)
-  colnames(used) <- c("loc", "scale", "shape")
   if (missing(log.scale)) log.scale <- FALSE
   if (missing(correlation)) correlation <- "mat32"
   if (!(correlation %in% c("expo", "gauss", "mat32", "mat52"))) stop("Argument correlation must be one of 'expo', 'gauss', 'mat32' or 'mat52'!")
@@ -280,7 +269,7 @@ hkevp.fit <- function(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.ma
   if (!quiet) cat("MCMC begins...\n")
   
   if (fit.margins) {
-    result <- .Call('hkevp_mcmc_hkevp', PACKAGE = 'hkevp', y0, sites, knots, niter, nburn, trace, quiet, dss, dsk, na.mat, spatial.covariates, used, log.scale, gev.vary, correlation, mcmc.init$loc, mcmc.init$scale, mcmc.init$shape, mcmc.init$range, mcmc.init$sill, mcmc.init$alpha, mcmc.init$tau, mcmc.init$A, mcmc.init$B, mcmc.prior$constant.gev, mcmc.prior$beta.sd, mcmc.prior$range, mcmc.prior$sill, mcmc.prior$alpha, mcmc.prior$tau, mcmc.jumps$gev, mcmc.jumps$range, mcmc.jumps$alpha, mcmc.jumps$tau, mcmc.jumps$A, mcmc.jumps$B)
+    result <- .Call('hkevp_mcmc_hkevp', PACKAGE = 'hkevp', y0, sites, knots, niter, nburn, trace, quiet, dss, dsk, na.mat, spatial.covariates, log.scale, gev.vary, correlation, mcmc.init$loc, mcmc.init$scale, mcmc.init$shape, mcmc.init$range, mcmc.init$sill, mcmc.init$alpha, mcmc.init$tau, mcmc.init$A, mcmc.init$B, mcmc.prior$constant.gev, mcmc.prior$beta.sd, mcmc.prior$range, mcmc.prior$sill, mcmc.prior$alpha, mcmc.prior$tau, mcmc.jumps$gev, mcmc.jumps$range, mcmc.jumps$alpha, mcmc.jumps$tau, mcmc.jumps$A, mcmc.jumps$B)
   }
   else {
     result <- .Call('hkevp_mcmc_deponly', PACKAGE = 'hkevp', y0, sites, knots, niter, nburn, trace, quiet, max(dss), dsk, na.mat, mcmc.init$alpha, mcmc.init$tau, mcmc.init$A, mcmc.init$B, mcmc.prior$alpha, mcmc.prior$tau, mcmc.jumps$alpha, mcmc.jumps$tau, mcmc.jumps$A, mcmc.jumps$B)
@@ -304,7 +293,6 @@ hkevp.fit <- function(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.ma
   result$sites <- sites
   result$knots <- knots
   result$spatial.covariates <- spatial.covariates
-  result$used.covariates <- used
   result$correlation <- correlation
   result$nstep <- length(mcmc.index)
   result$log.scale <- log.scale

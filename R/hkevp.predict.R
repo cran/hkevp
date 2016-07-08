@@ -75,15 +75,15 @@
 #' ypred <- hkevp.predict(fit, targets, predict.type = "kriging")
 #' 
 #' # Plot of the density and the true value for 4 first realizations:
-#' par(mfrow = c(2, 2))
-#' plot(density(ypred[1,1,]), main = "Target 1 / Year 1")
-#' abline(v = ysim[1,10], col = 2, lwd = 2)
-#' plot(density(ypred[2,1,]), main = "Target 1 / Year 2")
-#' abline(v = ysim[2,10], col = 2, lwd = 2)
-#' plot(density(ypred[1,2,]), main = "Target 2 / Year 1")
-#' abline(v = ysim[1,11], col = 2, lwd = 2)
-#' plot(density(ypred[2,2,]), main = "Target 2 / Year 2")
-#' abline(v = ysim[2,11], col = 2, lwd = 2)
+#' # par(mfrow = c(2, 2))
+#' # plot(density(ypred[1,1,]), main = "Target 1 / Year 1")
+#' # abline(v = ysim[1,10], col = 2, lwd = 2)
+#' # plot(density(ypred[2,1,]), main = "Target 1 / Year 2")
+#' # abline(v = ysim[2,10], col = 2, lwd = 2)
+#' # plot(density(ypred[1,2,]), main = "Target 2 / Year 1")
+#' # abline(v = ysim[1,11], col = 2, lwd = 2)
+#' # plot(density(ypred[2,2,]), main = "Target 2 / Year 2")
+#' # abline(v = ysim[2,11], col = 2, lwd = 2)
 #' 
 #' 
 #' 
