@@ -244,8 +244,8 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
                       double const& B_init,
                       arma::mat const& constant_gev_prior,
                       double const& beta_variance_prior,
-                      arma::mat const& range_prior,
-                      arma::mat const& sill_prior,
+                      arma::vec const& range_prior,
+                      arma::vec const& sill_prior,
                       arma::vec const& alpha_prior,
                       arma::vec const& tau_prior,
                       arma::vec const& gev_jumps,
@@ -383,7 +383,8 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
   arma::mat quadraticForm = arma::zeros<arma::mat>(n_covar, n_covar);
   arma::vec BETA_conjugate_meanVector(n_covar);
   arma::mat BETA_conjugate_covarianceMatrix(n_covar, n_covar);
-  arma::vec sill_conjugate = arma::zeros<arma::mat>(2);
+  arma::vec sill_conjugate = arma::zeros<arma::vec>(2);
+  sill_conjugate(0) = n_sites/2 + sill_prior(0);
   
   // Count for acceptation (adaptive procedure)
   int A_count = 0;
@@ -596,17 +597,13 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
         
         
         // ---------- STEP 3: Updating the sill using Gamma conjugate prior
-        // Quadratic form used in the "b" parameter of the gamma prior
-        quadraticForm = (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev)).t() * GEV_covarMatrix_inverted * (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev));
-        
         // New sill
-        sill_conjugate(0) = n_sites/2 + sill_prior(0,0);
-        sill_conjugate(1) = sill_prior(1,0) + as_scalar(sills_current(n_gev)*quadraticForm/2);
-        sills_current(n_gev) = 1/R::rgamma(sill_conjugate(0), 1/sill_conjugate(1));
-        
+        sill_conjugate(1) = sill_prior(1) + sills_current(n_gev)*as_scalar((GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev)).t() * GEV_covarMatrix_inverted * (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev))/2.0);
+        sills_current(n_gev) = ::Rf_rgamma(sill_conjugate(0), 1.0/sill_conjugate(1));
+	
         // New covariance matrix
         if (correlation==corr_expo) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-dss/ranges_current(n_gev));}
-        if (correlation==corr_gauss) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-pow(dss/ranges_current(n_gev),2.0)/2);}
+        if (correlation==corr_gauss) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-pow(dss/ranges_current(n_gev),2.0)/2.0);}
         if (correlation==corr_mat32) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * (1+dss/ranges_current(n_gev)*sqrt(3.0)) % exp(-dss/ranges_current(n_gev)*sqrt(3.0));}
         if (correlation==corr_mat52) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * (1+dss/ranges_current(n_gev)*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_current(n_gev), 2.0)) % exp(-dss/ranges_current(n_gev)*sqrt(5.0));}
         
@@ -627,8 +624,8 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
           (inv(covarMatrix_candidate)-inv(GEVcovarMatrices.slice(n_gev))) *
           (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev))))
           -0.5*log(det(covarMatrix_candidate)) + 0.5*log(det(GEVcovarMatrices.slice(n_gev)))
-          + R::dbeta(range_candidate/(2*dist_max), range_prior(0,n_gev), range_prior(1,n_gev), 1)
-          - R::dbeta(ranges_current(n_gev)/(2*dist_max), range_prior(0,n_gev), range_prior(1,n_gev), 1)
+          + R::dbeta(range_candidate/(2.0*dist_max), range_prior(0), range_prior(1), 1)
+          - R::dbeta(ranges_current(n_gev)/(2.0*dist_max), range_prior(0), range_prior(1), 1)
           + log(range_candidate) - log(ranges_current(n_gev))
           ;
         
@@ -685,8 +682,8 @@ Rcpp::List mcmc_hkevp(arma::mat const& Y,
         if (GEV_count(n_gev) < 30*pow(n_sites, gev_vary(n_gev))) {GEV_RW(n_gev) = GEV_RW(n_gev)*0.9;}
         if (GEV_count(n_gev) > 60*pow(n_sites, gev_vary(n_gev))) {GEV_RW(n_gev) = GEV_RW(n_gev)*1.1;}
         GEV_count(n_gev) = 0;
-        if (range_count(n_gev) < 30*n_sites) {range_RW(n_gev) = range_RW(n_gev)*0.9;}
-        if (range_count(n_gev) > 60*n_sites) {range_RW(n_gev) = range_RW(n_gev)*1.1;}
+        if (range_count(n_gev) < 30) {range_RW(n_gev) = range_RW(n_gev)*0.9;}
+        if (range_count(n_gev) > 60) {range_RW(n_gev) = range_RW(n_gev)*1.1;}
         range_count(n_gev) = 0;
       }
     }
@@ -1098,8 +1095,8 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
                        double const& sills_init,
                        arma::mat const& constant_gev_prior,
                        double const& beta_variance_prior,
-                       arma::mat const& range_prior,
-                       arma::mat const& sill_prior,
+                       arma::vec const& range_prior,
+                       arma::vec const& sill_prior,
                        arma::vec const& gev_jumps,
                        arma::vec const& range_jumps)
 {
@@ -1205,6 +1202,7 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
   arma::vec BETA_conjugate_meanVector(n_covar);
   arma::mat BETA_conjugate_covarianceMatrix(n_covar, n_covar);
   arma::vec sill_conjugate = arma::zeros<arma::mat>(2);
+  sill_conjugate(0) = n_sites/2.0 + sill_prior(0);
   
   // Count for acceptation (adaptive procedure)
   arma::vec GEV_count = arma::zeros<arma::vec>(3);
@@ -1277,17 +1275,13 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
         
         
         // ---------- STEP 3: Updating the sill using Gamma conjugate prior
-        // Quadratic form used in the "b" parameter of the gamma prior
-        quadraticForm = (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev)).t() * GEV_covarMatrix_inverted * (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev));
-        
         // New sill
-        sill_conjugate(0) = n_sites/2 + sill_prior(0,0);
-        sill_conjugate(1) = sill_prior(1,0) + as_scalar(sills_current(n_gev)*quadraticForm/2);
-        sills_current(n_gev) = 1/R::rgamma(sill_conjugate(0), 1/sill_conjugate(1));
-        
+        sill_conjugate(1) = sill_prior(1) + sills_current(n_gev)*as_scalar((GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev)).t() * GEV_covarMatrix_inverted * (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev))/2.0);
+        sills_current(n_gev) = ::Rf_rgamma(sill_conjugate(0), 1.0/sill_conjugate(1));
+	
         // New covariance matrix
         if (correlation==corr_expo) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-dss/ranges_current(n_gev));}
-        if (correlation==corr_gauss) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-pow(dss/ranges_current(n_gev),2.0)/2);}
+        if (correlation==corr_gauss) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * exp(-pow(dss/ranges_current(n_gev),2.0)/2.0);}
         if (correlation==corr_mat32) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * (1+dss/ranges_current(n_gev)*sqrt(3.0)) % exp(-dss/ranges_current(n_gev)*sqrt(3.0));}
         if (correlation==corr_mat52) {GEVcovarMatrices.slice(n_gev) = sills_current(n_gev) * (1+dss/ranges_current(n_gev)*sqrt(5.0) + 5.0/3.0*pow(dss/ranges_current(n_gev), 2.0)) % exp(-dss/ranges_current(n_gev)*sqrt(5.0));}
         
@@ -1308,8 +1302,8 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
           (inv(covarMatrix_candidate)-inv(GEVcovarMatrices.slice(n_gev))) *
           (GEV_current.col(n_gev)-GEVmeanVectors.col(n_gev))))
           -0.5*log(det(covarMatrix_candidate)) + 0.5*log(det(GEVcovarMatrices.slice(n_gev)))
-          + R::dbeta(range_candidate/(2*dist_max), range_prior(0,n_gev), range_prior(1,n_gev), 1)
-          - R::dbeta(ranges_current(n_gev)/(2*dist_max), range_prior(0,n_gev), range_prior(1,n_gev), 1)
+          + R::dbeta(range_candidate/(2*dist_max), range_prior(0), range_prior(1), 1)
+          - R::dbeta(ranges_current(n_gev)/(2*dist_max), range_prior(0), range_prior(1), 1)
           + log(range_candidate) - log(ranges_current(n_gev))
           ;
         
@@ -1353,8 +1347,8 @@ Rcpp::List mcmc_latent(arma::mat const& Y,
         if (GEV_count(n_gev) < 30*pow(n_sites, gev_vary(n_gev))) {GEV_RW(n_gev) = GEV_RW(n_gev)*0.9;}
         if (GEV_count(n_gev) > 60*pow(n_sites, gev_vary(n_gev))) {GEV_RW(n_gev) = GEV_RW(n_gev)*1.1;}
         GEV_count(n_gev) = 0;
-        if (range_count(n_gev) < 30*n_sites) {range_RW(n_gev) = range_RW(n_gev)*0.9;}
-        if (range_count(n_gev) > 60*n_sites) {range_RW(n_gev) = range_RW(n_gev)*1.1;}
+        if (range_count(n_gev) < 30) {range_RW(n_gev) = range_RW(n_gev)*0.9;}
+        if (range_count(n_gev) > 60) {range_RW(n_gev) = range_RW(n_gev)*1.1;}
         range_count(n_gev) = 0;
       }
     }

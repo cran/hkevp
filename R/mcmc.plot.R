@@ -41,7 +41,7 @@
 #' fit <- hkevp.fit(ysim, sites, niter = 1000)
 #' 
 #' # Markov chains plot:
-#' # mcmc.plot(fit)
+#' mcmc.plot(fit, TRUE)
 #' 
 #' 
 #' 
@@ -74,6 +74,7 @@ mcmc.plot <- function(fit, plot.spatial, mfrow) {
     # Colors
     nsites <- nrow(fit$sites)[1]
     COLORS <- rgb(0:(nsites - 1)/nsites,0:(nsites - 1)/nsites,0:(nsites - 1)/nsites)
+    COLORS <- rainbow(nsites)
     
     # GEV loc
     if (fit$spatial$vary[1])
@@ -83,7 +84,7 @@ mcmc.plot <- function(fit, plot.spatial, mfrow) {
     box()
     axis(1)
     axis(2, las = 2)
-    title(expression("Loc"))
+    title(expression("Location "*mu))
     
     # GEV scale
     if (fit$spatial$vary[2])
@@ -93,7 +94,7 @@ mcmc.plot <- function(fit, plot.spatial, mfrow) {
     box()
     axis(1)
     axis(2, las = 2)
-    title(expression("Scale"))
+    title(expression("Scale "*sigma))
     
     # GEV shape
     if (fit$spatial$vary[3])
@@ -103,7 +104,7 @@ mcmc.plot <- function(fit, plot.spatial, mfrow) {
     box()
     axis(1)
     axis(2, las = 2)
-    title(expression("Shape"))
+    title(expression("Shape "*xi))
   }
   if (bool[2]) {
     # Alpha
@@ -131,18 +132,17 @@ mcmc.plot <- function(fit, plot.spatial, mfrow) {
   
   # 4/ GEV Spatial parameters (if plot.spatial is TRUE, optional)
   if (plot.spatial & bool[1]) {
+    COLORS.spat <- rainbow(3)
+    
     # Sills
-    matplot(fit$spatial$sills, type = 'l', lty = 1, col = fit$spatial$vary, xlab = 'Iterations', ylab = '', axes = FALSE)
-    box()
-    axis(1)
-    axis(2, las = 2)
+    matplot(fit$spatial$sills, type = 'l', lty = 1, col = COLORS.spat, xlab = 'Iterations', ylab = '', axes = FALSE)
+    box(); axis(1); axis(2, las = 2)
     title(expression("Sills "*delta))
     
+    
     # Ranges
-    matplot(fit$spatial$ranges, type = 'l', lty = 1, col = fit$spatial$vary, xlab = 'Iterations', ylab = '', axes = FALSE)
-    box()
-    axis(1)
-    axis(2, las = 2)
+    matplot(fit$spatial$ranges, type = 'l', lty = 1, col = COLORS.spat, xlab = 'Iterations', ylab = '', axes = FALSE)
+    box(); axis(1); axis(2, las = 2)
     title(expression("Ranges "*lambda))
   }
   

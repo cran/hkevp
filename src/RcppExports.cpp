@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // mcmc_hkevp
-Rcpp::List mcmc_hkevp(arma::mat const& Y, arma::mat const& sites, arma::mat const& knots, int const& niter, int const& nburn, int const& trace, bool const& quiet, arma::mat const& dss, arma::mat const& dsk, arma::mat const& nas, arma::mat const& spatial_covariates, bool const& log_scale, arma::vec const& gev_vary, std::string const& correlation, double const& gevloc_init, double const& gevscale_init, double const& gevshape_init, double const& ranges_init, double const& sills_init, double const& alpha_init, double const& tau_init, double const& A_init, double const& B_init, arma::mat const& constant_gev_prior, double const& beta_variance_prior, arma::mat const& range_prior, arma::mat const& sill_prior, arma::vec const& alpha_prior, arma::vec const& tau_prior, arma::vec const& gev_jumps, arma::vec const& range_jumps, double const& alpha_jumps, double const& tau_jumps, double const& A_jumps, double const& B_jumps);
+Rcpp::List mcmc_hkevp(arma::mat const& Y, arma::mat const& sites, arma::mat const& knots, int const& niter, int const& nburn, int const& trace, bool const& quiet, arma::mat const& dss, arma::mat const& dsk, arma::mat const& nas, arma::mat const& spatial_covariates, bool const& log_scale, arma::vec const& gev_vary, std::string const& correlation, double const& gevloc_init, double const& gevscale_init, double const& gevshape_init, double const& ranges_init, double const& sills_init, double const& alpha_init, double const& tau_init, double const& A_init, double const& B_init, arma::mat const& constant_gev_prior, double const& beta_variance_prior, arma::vec const& range_prior, arma::vec const& sill_prior, arma::vec const& alpha_prior, arma::vec const& tau_prior, arma::vec const& gev_jumps, arma::vec const& range_jumps, double const& alpha_jumps, double const& tau_jumps, double const& A_jumps, double const& B_jumps);
 RcppExport SEXP hkevp_mcmc_hkevp(SEXP YSEXP, SEXP sitesSEXP, SEXP knotsSEXP, SEXP niterSEXP, SEXP nburnSEXP, SEXP traceSEXP, SEXP quietSEXP, SEXP dssSEXP, SEXP dskSEXP, SEXP nasSEXP, SEXP spatial_covariatesSEXP, SEXP log_scaleSEXP, SEXP gev_varySEXP, SEXP correlationSEXP, SEXP gevloc_initSEXP, SEXP gevscale_initSEXP, SEXP gevshape_initSEXP, SEXP ranges_initSEXP, SEXP sills_initSEXP, SEXP alpha_initSEXP, SEXP tau_initSEXP, SEXP A_initSEXP, SEXP B_initSEXP, SEXP constant_gev_priorSEXP, SEXP beta_variance_priorSEXP, SEXP range_priorSEXP, SEXP sill_priorSEXP, SEXP alpha_priorSEXP, SEXP tau_priorSEXP, SEXP gev_jumpsSEXP, SEXP range_jumpsSEXP, SEXP alpha_jumpsSEXP, SEXP tau_jumpsSEXP, SEXP A_jumpsSEXP, SEXP B_jumpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -37,8 +37,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double const& >::type B_init(B_initSEXP);
     Rcpp::traits::input_parameter< arma::mat const& >::type constant_gev_prior(constant_gev_priorSEXP);
     Rcpp::traits::input_parameter< double const& >::type beta_variance_prior(beta_variance_priorSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type range_prior(range_priorSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type sill_prior(sill_priorSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type range_prior(range_priorSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type sill_prior(sill_priorSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type alpha_prior(alpha_priorSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type tau_prior(tau_priorSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type gev_jumps(gev_jumpsSEXP);
@@ -82,7 +82,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // mcmc_latent
-Rcpp::List mcmc_latent(arma::mat const& Y, arma::mat const& sites, int const& niter, int const& nburn, int const& trace, bool const& quiet, arma::mat const& dss, arma::mat const& nas, arma::mat const& spatial_covariates, bool const& log_scale, arma::vec const& gev_vary, std::string const& correlation, double const& gevloc_init, double const& gevscale_init, double const& gevshape_init, double const& ranges_init, double const& sills_init, arma::mat const& constant_gev_prior, double const& beta_variance_prior, arma::mat const& range_prior, arma::mat const& sill_prior, arma::vec const& gev_jumps, arma::vec const& range_jumps);
+Rcpp::List mcmc_latent(arma::mat const& Y, arma::mat const& sites, int const& niter, int const& nburn, int const& trace, bool const& quiet, arma::mat const& dss, arma::mat const& nas, arma::mat const& spatial_covariates, bool const& log_scale, arma::vec const& gev_vary, std::string const& correlation, double const& gevloc_init, double const& gevscale_init, double const& gevshape_init, double const& ranges_init, double const& sills_init, arma::mat const& constant_gev_prior, double const& beta_variance_prior, arma::vec const& range_prior, arma::vec const& sill_prior, arma::vec const& gev_jumps, arma::vec const& range_jumps);
 RcppExport SEXP hkevp_mcmc_latent(SEXP YSEXP, SEXP sitesSEXP, SEXP niterSEXP, SEXP nburnSEXP, SEXP traceSEXP, SEXP quietSEXP, SEXP dssSEXP, SEXP nasSEXP, SEXP spatial_covariatesSEXP, SEXP log_scaleSEXP, SEXP gev_varySEXP, SEXP correlationSEXP, SEXP gevloc_initSEXP, SEXP gevscale_initSEXP, SEXP gevshape_initSEXP, SEXP ranges_initSEXP, SEXP sills_initSEXP, SEXP constant_gev_priorSEXP, SEXP beta_variance_priorSEXP, SEXP range_priorSEXP, SEXP sill_priorSEXP, SEXP gev_jumpsSEXP, SEXP range_jumpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -106,8 +106,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double const& >::type sills_init(sills_initSEXP);
     Rcpp::traits::input_parameter< arma::mat const& >::type constant_gev_prior(constant_gev_priorSEXP);
     Rcpp::traits::input_parameter< double const& >::type beta_variance_prior(beta_variance_priorSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type range_prior(range_priorSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type sill_prior(sill_priorSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type range_prior(range_priorSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type sill_prior(sill_priorSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type gev_jumps(gev_jumpsSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type range_jumps(range_jumpsSEXP);
     __result = Rcpp::wrap(mcmc_latent(Y, sites, niter, nburn, trace, quiet, dss, nas, spatial_covariates, log_scale, gev_vary, correlation, gevloc_init, gevscale_init, gevshape_init, ranges_init, sills_init, constant_gev_prior, beta_variance_prior, range_prior, sill_prior, gev_jumps, range_jumps));
