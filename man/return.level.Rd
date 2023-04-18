@@ -34,4 +34,3 @@ return.level(period = 200, loc = 1:10, scale = 1, shape = 0)
 \author{
 Quentin Sebille
 }
-

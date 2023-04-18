@@ -55,6 +55,7 @@
 #'
 #'
 #' @examples
+#' \donttest{
 #' # Simulation of HKEVP:
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' targets <- as.matrix(expand.grid(1.5:2.5,1.5:2.5))
@@ -85,7 +86,7 @@
 #' # plot(density(ypred[2,2,]), main = "Target 2 / Year 2")
 #' # abline(v = ysim[2,11], col = 2, lwd = 2)
 #' 
-#' 
+#' }
 #' 
 #' 
 hkevp.predict <- function(fit, targets, targets.covariates, predict.type = "kriging") {

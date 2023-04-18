@@ -57,4 +57,3 @@ ysim <- hkevp.rand(10, sites, sites, loc, scale, shape, alpha, tau)
 \author{
 Quentin Sebille
 }
-

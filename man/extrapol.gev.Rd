@@ -23,6 +23,7 @@ Predictive distributions of the GEV parameters at a set of ungauged sites (targe
 Since the GEV parameters are modelled with latent Gaussian processes, spatial extrapolation of the marginal distributions at target positions \eqn{(s^*_1, ..., s^*_k)} is performed with simple kriging. Estimation is done at each MCMC step to produce a sample of the predictive distribution.
 }
 \examples{
+\donttest{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:3,1:3))
 loc <- sites[,1]*10
@@ -44,13 +45,12 @@ predicted <- sapply(gev.targets, median)
 sd.predict <- sapply(gev.targets, sd)
 true <- c(targets[,1]*10, scale, shape)
 # cbind(true, predicted, sd.predict)
-
-
 }
-\author{
-Quentin Sebille
+
 }
 \seealso{
 \code{\link{extrapol.return.level}}
 }
-
+\author{
+Quentin Sebille
+}

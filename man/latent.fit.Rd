@@ -4,8 +4,22 @@
 \alias{latent.fit}
 \title{Fitting procedure of the latent variable model}
 \usage{
-latent.fit(y, sites, niter, nburn, nthin, quiet, trace, gev.vary,
-  spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
+latent.fit(
+  y,
+  sites,
+  niter,
+  nburn,
+  nthin,
+  quiet,
+  trace,
+  gev.vary,
+  spatial.covariates,
+  log.scale,
+  correlation,
+  mcmc.init,
+  mcmc.prior,
+  mcmc.jumps
+)
 }
 \arguments{
 \item{y}{A matrix of observed block maxima. Each column corresponds to a site position.}
@@ -87,6 +101,7 @@ The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are name
 \item{mcmc.jumps: the possible elements are \code{gev} and \code{range}, vectors of length 3 (for each GEV parameter).}}
 }
 \examples{
+\donttest{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:4,1:4))
 loc <- sites[,1]*10
@@ -99,20 +114,14 @@ ysim <- hkevp.rand(15, sites, sites, loc, scale, shape, alpha, tau)
 # Latent Variable Model fit:
 set.seed(1)
 fit <- latent.fit(ysim, sites, niter = 10000, nburn = 5000, nthin = 5)
-
-
-
 mcmc.plot(fit, TRUE)
 par(mfrow = c(2,2))
 apply(fit$GEV[,1,], 1, acf)
-
-
-
-
-
 }
-\author{
-Quentin Sebille
+
+
+
+
 }
 \references{
 Reich, B. J., & Shaby, B. A. (2012). A hierarchical max-stable spatial model for extreme precipitation. The annals of applied statistics, 6(4), 1430. <DOI:10.1214/12-AOAS591>
@@ -122,4 +131,6 @@ Davison, A. C., Padoan, S. A., & Ribatet, M. (2012). Statistical modeling of spa
 \seealso{
 hkevp.fit
 }
-
+\author{
+Quentin Sebille
+}

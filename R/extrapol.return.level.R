@@ -39,6 +39,7 @@
 #' 
 #'
 #' @examples
+#' \donttest{
 #' # Simulation of HKEVP:
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' knots <- sites
@@ -59,7 +60,7 @@
 #' pred.sd <- apply(pred.sample, 2, sd)
 #' true <- return.level(100, targets[,1]*10, scale, shape)
 #' # cbind(true, pred.mean, pred.sd)
-#' 
+#' }
 #' 
 #' 
 extrapol.return.level <- function(period, fit, targets, targets.covariates) {

@@ -1,17 +1,9 @@
 #' @title
 #' Point estimates of HKEVP fit
 #' 
-#' @author
-#' Quentin Sebille
-#' 
-#' 
-#' 
+#' @author Quentin Sebille
 #' @description 
-#' Application of a function to the main Markov chains resulting from the procedure \code{hkevp.fit}. May be used to obtain point estimates on posterior distribution (e.g. the mean, the median). See details.
-#' 
-#' 
-#' 
-#' 
+#' Application of a function to the main Markov chains resulting from the procedure \code{hkevp.fit}. May be used to obtain point estimates of the posterior distribution (e.g., the mean or the median). See details.
 #' 
 #' @param fit
 #' A named list.
@@ -23,16 +15,12 @@
 #' @param ...
 #' Optional arguments of the function to be applied on the Markov chains (e.g. \code{na.rm = FALSE}).
 #'
-#'
-#'
 #' 
 #' 
 #' @details 
 #' A function is applied to the main Markov chains resulting from the MCMC procedures \code{hkevp.fit} or \code{latent.fit}. These chains correspond to the three GEV parameters, the dependence parameter \eqn{\alpha} and the bandwidth \eqn{\tau}.
 #' 
 #' The value returned by \code{FUN} must be a single value.
-#'
-#'
 #'
 #'
 #' @return
@@ -48,6 +36,7 @@
 #' 
 #' @examples
 #' # Simulation of HKEVP:
+#' \donttest{
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' knots <- sites
 #' loc <- sites[,1]*10
@@ -63,7 +52,7 @@
 #' # Posterior median and standard deviation:
 #' # mcmc.fun(fit, median)
 #' # mcmc.fun(fit, sd)
-#' 
+#' }
 #' 
 #' 
 mcmc.fun <- function(fit, FUN, ...) {

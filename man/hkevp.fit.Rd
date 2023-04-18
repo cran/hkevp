@@ -4,9 +4,24 @@
 \alias{hkevp.fit}
 \title{Fitting procedure of the HKEVP with MCMC algorithm}
 \usage{
-hkevp.fit(y, sites, knots, niter, nburn, nthin, quiet, trace, fit.margins,
-  gev.vary, spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior,
-  mcmc.jumps)
+hkevp.fit(
+  y,
+  sites,
+  knots,
+  niter,
+  nburn,
+  nthin,
+  quiet,
+  trace,
+  fit.margins,
+  gev.vary,
+  spatial.covariates,
+  log.scale,
+  correlation,
+  mcmc.init,
+  mcmc.prior,
+  mcmc.jumps
+)
 }
 \arguments{
 \item{y}{A matrix of observed block maxima. Each column corresponds to a site position.}
@@ -104,6 +119,7 @@ The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are name
 \item{\code{tau}, \code{alpha}, \code{A}, \code{B}: single values for each.}}}}
 }
 \examples{
+\donttest{
 # Simulation of HKEVP:
 set.seed(1)
 sites <- as.matrix(expand.grid(1:3,1:3))
@@ -116,12 +132,9 @@ ysim <- hkevp.rand(10, sites, sites, loc, scale, shape, alpha, tau)
 
 # HKEVP fit:
 fit <- latent.fit(ysim, sites, niter = 1000)
-
-
-
 }
-\author{
-Quentin Sebille
+
+
 }
 \references{
 Reich, B. J., & Shaby, B. A. (2012). A hierarchical max-stable spatial model for extreme precipitation. The annals of applied statistics, 6(4), 1430. <DOI:10.1214/12-AOAS591>
@@ -133,4 +146,6 @@ Davison, A. C., Padoan, S. A., & Ribatet, M. (2012). Statistical modeling of spa
 \seealso{
 latent.fit
 }
-
+\author{
+Quentin Sebille
+}

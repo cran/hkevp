@@ -59,6 +59,7 @@
 #' 
 #' 
 #' @examples
+#' \donttest{
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' loc <- sites[,1]*10
 #' scale <- 3
@@ -74,7 +75,7 @@
 #' true.em <- hkevp.expmeasure(1, sites, sites, alpha, tau)
 #' # plot(predict.em, ylim = range(predict.em, true.em), type = "l")
 #' # abline(h = true.em, col = 2, lwd = 2)
-#' 
+#' }
 #' 
 hkevp.expmeasure <- function(z, sites, knots, alpha, tau, fit) {
   if (missing(fit)) {  ## Evaluation with given parameters

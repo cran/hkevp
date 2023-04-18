@@ -44,6 +44,7 @@ As sketched in \cite{Shaby and Reich (2012)}, two types of prediction are possib
 Posterior distribution for each realisation \eqn{t} of the process and each target position \eqn{s^*} is represented with a sample where each element corresponds to a step of the MCMC procedure.
 }
 \examples{
+\donttest{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:3,1:3))
 targets <- as.matrix(expand.grid(1.5:2.5,1.5:2.5))
@@ -74,16 +75,15 @@ ypred <- hkevp.predict(fit, targets, predict.type = "kriging")
 # plot(density(ypred[2,2,]), main = "Target 2 / Year 2")
 # abline(v = ysim[2,11], col = 2, lwd = 2)
 
-
-
-
 }
-\author{
-Quentin Sebille
+
+
 }
 \references{
 Reich, B. J., & Shaby, B. A. (2012). A hierarchical max-stable spatial model for extreme precipitation. The annals of applied statistics, 6(4), 1430. <DOI:10.1214/12-AOAS591>
 
 Shaby, B. A., & Reich, B. J. (2012). Bayesian spatial extreme value analysis to assess the changing risk of concurrent high temperatures across large portions of European cropland. Environmetrics, 23(8), 638-648. <DOI:10.1002/env.2178>
 }
-
+\author{
+Quentin Sebille
+}

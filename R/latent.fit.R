@@ -1,76 +1,76 @@
 #' @title
 #' Fitting procedure of the latent variable model
-#' 
+#'
 #' @author
 #' Quentin Sebille
-#' 
-#' 
-#' 
-#' @description 
+#'
+#'
+#'
+#' @description
 #' Metropolis-within-Gibbs algorithm that returns posterior distribution (as Markov chains) for the marginal GEV parameters of an observed spatial process.
 #' This function is close to \code{hkevp.fit} but with less parameters since conditional independence is assumed and only the margins are estimated.
 #' In \code{SpatialExtremes} library, a similar function can be found under the name \code{latent}.
-#' 
-#' 
-#' 
-#' 
-#' 
+#'
+#'
+#'
+#'
+#'
 #' @param y
 #' A matrix of observed block maxima. Each column corresponds to a site position.
-#' 
+#'
 #' @param sites
 #' The coordinates of the sites where the data are observed. Each row corresponds to a site position.
-#' 
+#'
 #' @param niter
 #' The number of MCMC iterations.
-#' 
+#'
 #' @param nburn
 #' The number of first MCMC iterations that are discarded. Zero by default.
-#' 
+#'
 #' @param nthin
 #' The size of the MCMC thinning. One by default (i.e. no thinning).
-#' 
+#'
 #' @param quiet
 #' A logical indicating if the progression of the routine should be displayed. TRUE by default.
-#' 
+#'
 #' @param trace
 #' If \code{quiet} is FALSE, the log-likelihood of the model is displayed each block of \code{trace} MCMC steps to observe fitting progression.
-#' 
+#'
 #' @param gev.vary
 #' A logical vector of size three indicating if the GEV parameters (respectively the location, the scale and the shape) are spatially-varying. If not (by default for the shape), the parameter is the same at each position.
-#' 
+#'
 #' @param spatial.covariates
 #' A numerical matrix of spatial covariates. Each row corresponds to a site position. See details.
-#' 
+#'
 #' @param log.scale
 #' A logical value indicating if the GEV scale parameter \eqn{\sigma} is modelled by its log. FALSE by default. See details.
-#' 
+#'
 #' @param correlation
 #' A character string indicating the form of the correlation function associated to the latent Gaussian processes that describes the marginal parameters. Must be one of \code{"expo"}, \code{"gauss"}, \code{"mat32"} (By default) and \code{"mat52"}, respectively corresponding to the exponential, Gaussian, Matern-3/2 and Matern-5/2 correlation functions.
-#' 
-#' @param mcmc.init 
+#'
+#' @param mcmc.init
 #' A named list indicating the initial states of the chains. See details.
-#' 
-#' @param mcmc.prior 
+#'
+#' @param mcmc.prior
 #' A named list indicating the hyperparameters of the prior distributions. See details.
-#' 
-#' @param mcmc.jumps 
+#'
+#' @param mcmc.jumps
 #' A named list indicating the amplitude of the jumps to propose the MCMC candidates. See details.
-#' 
-#' 
-#' 
-#' 
-#' @details 
+#'
+#'
+#'
+#'
+#' @details
 #' Details of the MCMC procedure are presented in \cite{Davison et al. (2012)}. This function follows the indications and the choices of the authors, with the exception of several small changes:
 #' \itemize{
 #' \item{The scale parameter \eqn{\sigma} can be modelled like the two other marginal parameters as in \cite{Davison et al. (2012)} or by its logarithm as in \cite{Reich and Shaby (2012)}. For this, use the argument \code{log.scale}, set to FALSE by default.}
-#' 
+#'
 #' \item{The Inverse-Gamma prior distributions defined for the bandwith parameter \eqn{\tau} and for the ranges \eqn{\lambda} of the latent processes are replaced by a Beta distribution over the interval \eqn{[0,2D_{max}]}, where \eqn{D_{max}} stands for the maximum distance between two sites.}}
-#' 
+#'
 #' If the the parameters are assumed spatially-varying, the user can provide spatial covariates to fit the mean of the latent Gaussian processes. Recall for instance for the GEV location parameter that:
 #' \deqn{\mu(s) = \beta_{0,\mu} + \beta_{1,\mu} c_1(s) + ... + \beta_{p,\mu} c_p(s) ~.}
 #' The given matrix \code{spatial.covariates} that represents the \eqn{c_i(s)} elements should have the first column filled with ones to account for the intercept \eqn{\beta_0}.
-#' 
+#'
 #' The arguments \code{mcmc.init}, \code{mcmc.prior} and \code{mcmc.jumps} are named list that have default values. The user can make point changes in these arguments, by setting \code{mcmc.init = list(loc = .5)} for instance, but must respect the constraints of each element:
 #' \itemize{
 #' \item{\code{mcmc.init}: all elements are of length one. The possible elements are:
@@ -84,10 +84,10 @@
 #' \item{\code{range}: the two Beta parameters.}
 #' \item{\code{sill}: the two Inverse-Gamma parameters.}}}
 #' \item{mcmc.jumps: the possible elements are \code{gev} and \code{range}, vectors of length 3 (for each GEV parameter).}}
-#' 
-#' 
-#' 
-#' 
+#'
+#'
+#'
+#'
 #'
 #'
 #'
@@ -111,22 +111,23 @@
 #' \item{\code{nstep}: the number of steps at the end of the routine after burn-in and thinning.}
 #' \item{\code{log.scale}: a boolean indicating if the scale parameter has been modelled via its logarithm.}
 #' \item{\code{fit.type}: "latent" character string to specify the type of fit.}}
-#' 
-#' 
+#'
+#'
 #' @seealso hkevp.fit
-#' 
-#' 
+#'
+#'
 #' @export
 #'
 #'
-#' @references 
+#' @references
 #' Reich, B. J., & Shaby, B. A. (2012). A hierarchical max-stable spatial model for extreme precipitation. The annals of applied statistics, 6(4), 1430. <DOI:10.1214/12-AOAS591>
-#' 
+#'
 #' Davison, A. C., Padoan, S. A., & Ribatet, M. (2012). Statistical modeling of spatial extremes. Statistical Science, 27(2), 161-186. <DOI:10.1214/11-STS376>
-#' 
-#' 
-#' 
+#'
+#'
+#'
 #' @examples
+#' \donttest{
 #' # Simulation of HKEVP:
 #' sites <- as.matrix(expand.grid(1:4,1:4))
 #' loc <- sites[,1]*10
@@ -135,21 +136,18 @@
 #' alpha <- 1
 #' tau <- 2
 #' ysim <- hkevp.rand(15, sites, sites, loc, scale, shape, alpha, tau)
-#' 
+#'
 #' # Latent Variable Model fit:
 #' set.seed(1)
 #' fit <- latent.fit(ysim, sites, niter = 10000, nburn = 5000, nthin = 5)
-#' 
-#' 
-#' 
 #' mcmc.plot(fit, TRUE)
 #' par(mfrow = c(2,2))
 #' apply(fit$GEV[,1,], 1, acf)
-#' 
-#' 
-#' 
-#' 
-#' 
+#' }
+#'
+#'
+#'
+#'
 latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, spatial.covariates, log.scale, correlation, mcmc.init, mcmc.prior, mcmc.jumps)
 {
   ##########################################
@@ -168,7 +166,7 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   if (nthin <= 0 | nthin >= niter) stop("Invalid nthin parameter!")
   if (trace <= 0) trace <- 1
   trace <- floor(trace) # Protection against possible seg.fault!
-  
+
   # Margins
   if (missing(gev.vary)) gev.vary <- c(TRUE, TRUE, FALSE)
   if (length(gev.vary)!=3 | typeof(gev.vary)!="logical") stop("Invalid gev.vary parameter!")
@@ -177,8 +175,8 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   if (missing(log.scale)) log.scale <- FALSE
   if (missing(correlation)) correlation <- "mat32"
   if (!(correlation %in% c("expo", "gauss", "mat32", "mat52"))) stop("Argument correlation must be one of 'expo', 'gauss', 'mat32' or 'mat52'!")
-  
-  
+
+
   # Initial states
   loc.init <- median(y, na.rm = TRUE)
   scale.init <- 5
@@ -198,7 +196,7 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
     stop("Invalid initial state for range: should be between 0 and 2*Dmax!")
   if (mcmc.init$sill <= 0) stop("Invalid initial state for sills: must be positive!")
   if (log.scale)  mcmc.init$scale <- log(mcmc.init$scale)
-  
+
   # Prior distributions
   constant.gev.prior <- rbind(rep(0,3), c(10, 1, .25))  # Normal
   beta.sd.prior <- 100  # Normal
@@ -218,8 +216,8 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   if (illdefined.prior) stop("Argument mcmc.prior is ill-defined!")
   mcmc.prior$sill <- matrix(mcmc.prior$sill, 2, 3)
   mcmc.prior$range <- matrix(mcmc.prior$range, 2, 3)
-  
-  
+
+
   # Jumps length to generate candidates
   gev.jumps <- c(1, .1, .01)
   range.jumps <- c(1, 1, 1)
@@ -231,27 +229,50 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   if (length(mcmc.jumps$gev) != 3) illdefined.jumps <- TRUE
   if (length(mcmc.jumps$range) != 3) illdefined.jumps <- TRUE
   if (illdefined.jumps) stop("Argument mcmc.jumps is ill-defined!")
-  
-  
+
+
   # Distance and NA matrices
   dss <- as.matrix(dist(sites))
   na.mat <- 1 - is.na(y)  # Matrix of missing values
-  
+
   # Missing values are replaced by 0 but ignored in the MCMC function
   y0 <- y
   y0[is.na(y)] <- 0
-  
-  
-  
-  
+
+
+
+
   ##########################
   ## Calling C++ function ##
   ##########################
   # C++ function
   if (!quiet) cat("MCMC begins...\n")
-    result <- .Call('hkevp_mcmc_latent', PACKAGE = 'hkevp', y0, sites, niter, nburn, trace, quiet, dss, na.mat, spatial.covariates, log.scale, gev.vary, correlation, mcmc.init$loc, mcmc.init$scale, mcmc.init$shape, mcmc.init$range, mcmc.init$sill, mcmc.prior$constant.gev, mcmc.prior$beta.sd, mcmc.prior$range, mcmc.prior$sill, mcmc.jumps$gev, mcmc.jumps$range)
-  
-  
+    result <- mcmc_latent(
+      Y = y0,
+      sites = sites,
+      niter = niter,
+      nburn = nburn,
+      trace = trace,
+      quiet = quiet,
+      dss = dss,
+      nas = na.mat,
+      spatial_covariates = spatial.covariates,
+      log_scale = log.scale,
+      gev_vary = gev.vary,
+      correlation = correlation,
+      gevloc_init = mcmc.init$loc,
+      gevscale_init = mcmc.init$scale,
+      gevshape_init = mcmc.init$shape,
+      ranges_init = mcmc.init$range,
+      sills_init = mcmc.init$sill,
+      constant_gev_prior = mcmc.prior$constant.gev,
+      beta_variance_prior = mcmc.prior$beta.sd,
+      range_prior = mcmc.prior$range,
+      sill_prior = mcmc.prior$sill,
+      gev_jumps = mcmc.jumps$gev,
+      range_jumps = mcmc.jumps$range)
+
+
   # Burn-in period and thinning
   mcmc.index <- seq(nburn+1, niter, by = nthin)
   result$GEV <- result$GEV[,,mcmc.index]
@@ -259,8 +280,8 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   result$spatial$beta <- result$spatial$beta[mcmc.index,,]
   result$spatial$sills <- result$spatial$sills[mcmc.index,]
   result$spatial$ranges <- result$spatial$ranges[mcmc.index,]
-  
-  
+
+
   if (log.scale) result$GEV[,2,] <- exp(result$GEV[,2,])  # GEV log scale transformed to GEV scale
   result$data <- y
   result$sites <- sites
@@ -269,6 +290,6 @@ latent.fit <- function(y, sites, niter, nburn, nthin, quiet, trace, gev.vary, sp
   result$nstep <- length(mcmc.index)
   result$log.scale <- log.scale
   result$fit.type <- "latent"
-  
+
   return(result)
 }

@@ -28,6 +28,7 @@ Spatial extrapolation of the return level at target positions \eqn{(s^*_1, ..., 
 \item{Computation of the associated return level for each state of the predictive distribution.}}
 }
 \examples{
+\donttest{
 # Simulation of HKEVP:
 sites <- as.matrix(expand.grid(1:3,1:3))
 knots <- sites
@@ -48,14 +49,13 @@ pred.mean <- apply(pred.sample, 2, mean)
 pred.sd <- apply(pred.sample, 2, sd)
 true <- return.level(100, targets[,1]*10, scale, shape)
 # cbind(true, pred.mean, pred.sd)
-
-
-
 }
-\author{
-Quentin Sebille
+
+
 }
 \seealso{
 \code{\link{extrapol.gev}}
 }
-
+\author{
+Quentin Sebille
+}

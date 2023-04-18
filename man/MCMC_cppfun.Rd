@@ -10,3 +10,4 @@ This set of functions are called by \code{hkevp.fit} or \code{latent.fit} and sh
 }
 \author{Quentin Sebille}
 \seealso{\code{\link{hkevp.fit}}}
+\keyword{internal}

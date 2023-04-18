@@ -3,7 +3,6 @@
 \docType{package}
 \name{hkevp}
 \alias{hkevp}
-\alias{hkevp-package}
 \title{A hierarchical model for spatial extreme values}
 \description{
 The HKEVP of \cite{Reich and Shaby (2012)} is a hierarchical model which can be fitted on point-referenced block maxima across a region of space. Its acronym stands for Hierarchical Kernel Extreme Value Model.
@@ -60,9 +59,6 @@ A simpler version of the HKEVP, namely the latent variable model of Davison et a
 \note{
 I would like to thank Brian Reich and Benjamin Shaby for their help regarding the implementation of the inference procedure of the HKEVP, and Mathieu Ribatet for introducing me to the Bayesian world. I also acknowledge Electricite de France (EDF) for the financial support and the helpful discussions around the HKEVP with Anne Dutfoy, Marie Gallois, Thi Thu Huong Hoang and Sylvie Parey. Finally, I thank my two PhD supervisors Anne-Laure Fougeres and Cecile Mercadier for their reviews of this package.
 }
-\author{
-Quentin Sebille
-}
 \references{
 Beirlant, J., Goegebeur, Y., Segers, J. J. J., & Teugels, J. (2004). Statistics of Extremes: Theory and Applications. <DOI:10.1002/0470012382>
 
@@ -80,4 +76,6 @@ Shaby, B. A., & Reich, B. J. (2012). Bayesian spatial extreme value analysis to 
 
 Smith, R. L. (1990). Max-stable processes and spatial extremes. Unpublished manuscript.
 }
-
+\author{
+Quentin Sebille
+}

@@ -43,6 +43,7 @@
 #' 
 #'
 #' @examples
+#' \donttest{
 #' # Simulation of HKEVP:
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' loc <- sites[,1]*10
@@ -64,7 +65,7 @@
 #' sd.predict <- sapply(gev.targets, sd)
 #' true <- c(targets[,1]*10, scale, shape)
 #' # cbind(true, predicted, sd.predict)
-#' 
+#' }
 #' 
 extrapol.gev <- function(fit, targets, targets.covariates) {
   # Default value of targets covariates and test for compatibility with sites

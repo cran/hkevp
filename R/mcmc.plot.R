@@ -27,6 +27,7 @@
 #' 
 #'
 #' @examples
+#' \donttest{
 #' # Simulation of HKEVP:
 #' sites <- as.matrix(expand.grid(1:3,1:3))
 #' knots <- sites
@@ -42,7 +43,7 @@
 #' 
 #' # Markov chains plot:
 #' mcmc.plot(fit, TRUE)
-#' 
+#' }
 #' 
 #' 
 #' 
